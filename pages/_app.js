@@ -5,17 +5,25 @@ import Grid from "../components/Grid";
 import Page from "../components/Page";
 import Teaser from "../components/Teaser";
 import Hero from "../components/Hero";
+import Article from "../components/Article";
+import AllArticles from "../components/AllArticles";
+import PopularArticles from "../components/PopularArticles";
 
+// Connects a component to a blok from Storyblok
 const components = {
   feature: Feature,
   grid: Grid,
   teaser: Teaser,
   page: Page,
   hero: Hero,
+  "all-articles": AllArticles,
+  article: Article,
+  "popular-articles": PopularArticles,
 };
 
+// Connection
 storyblokInit({
-  accessToken: process.env.STORYBLOK_API_TOKEN,
+  accessToken: process.env.storyblokApiToken,
   use: [apiPlugin],
   components,
 });

@@ -1,5 +1,6 @@
 import { storyblokEditable } from "@storyblok/react";
 
+// Represents "Feature"-block in Storyblok (Nestable Block)
 const Feature = ({ blok }) => (
   <div className="column feature" {...storyblokEditable(blok)}>
     <div className="p-6">

@@ -9,17 +9,19 @@ const Navigation = () => {
         <div className="flex justify-between items-center  py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link href="/">
-              <span className="sr-only">Storyblok</span>
-              <img
-                className="h-20 w-auto sm:h-10 hidden sm:block"
-                src="https://a.storyblok.com/f/88751/251x53/0d3909fe96/storyblok-primary.png"
-                alt="Storyblok"
-              />
-              <img
-                className="h-20 w-auto sm:h-10 sm:hidden"
-                src="https://a.storyblok.com/f/88751/92x106/835caf912a/storyblok-logo.png"
-                alt="Storyblok"
-              />
+              <a>
+                <span className="sr-only">Storyblok</span>
+                <img
+                  className="h-20 w-auto sm:h-10 hidden sm:block"
+                  src="https://a.storyblok.com/f/88751/251x53/0d3909fe96/storyblok-primary.png"
+                  alt="Storyblok"
+                />
+                <img
+                  className="h-20 w-auto sm:h-10 sm:hidden"
+                  src="https://a.storyblok.com/f/88751/92x106/835caf912a/storyblok-logo.png"
+                  alt="Storyblok"
+                />
+              </a>
             </Link>
           </div>
           <div className="-mr-2 -my-2 md:hidden">
@@ -50,19 +52,25 @@ const Navigation = () => {
           </div>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-10">
             <Link href="/about">
-              <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                About
-              </div>
+              <a>
+                <div className="text-base font-medium text-gray-500 hover:text-gray-900">
+                  About
+                </div>
+              </a>
             </Link>
-            <Link href="/blog-articles">
-              <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Blog
-              </div>
+            <Link href="/blog">
+              <a>
+                <div className="text-base font-medium text-gray-500 hover:text-gray-900">
+                  Blog
+                </div>
+              </a>
             </Link>
             <Link href="/services">
-              <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Services
-              </div>
+              <a>
+                <div className="text-base font-medium text-gray-500 hover:text-gray-900">
+                  Services
+                </div>
+              </a>
             </Link>
           </div>
         </div>
@@ -112,27 +120,33 @@ const Navigation = () => {
               <div className="mt-6">
                 <nav className="grid gap-y-8">
                   <Link href="/about">
-                    <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                      {/* <!-- Heroicon name: outline/chart-bar --> */}
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        About
-                      </span>
-                    </div>
+                    <a>
+                      <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                        {/* <!-- Heroicon name: outline/chart-bar --> */}
+                        <span className="ml-3 text-base font-medium text-gray-900">
+                          About
+                        </span>
+                      </div>
+                    </a>
                   </Link>
                   <Link href="/blog">
-                    <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                      {/* <!-- Heroicon name: outline/cursor-click --> */}
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        Blog
-                      </span>
-                    </div>
+                    <a>
+                      <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                        {/* <!-- Heroicon name: outline/cursor-click --> */}
+                        <span className="ml-3 text-base font-medium text-gray-900">
+                          Blog
+                        </span>
+                      </div>
+                    </a>
                   </Link>
                   <Link href="/services">
-                    <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        Services
-                      </span>
-                    </div>
+                    <a>
+                      <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                        <span className="ml-3 text-base font-medium text-gray-900">
+                          Services
+                        </span>
+                      </div>
+                    </a>
                   </Link>
                 </nav>
               </div>
