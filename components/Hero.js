@@ -1,5 +1,5 @@
 import { storyblokEditable } from "@storyblok/react";
-
+// Represents "Hero"-block in Storyblok (Nestable Block)
 const Hero = ({ blok }) => {
   return (
     <div

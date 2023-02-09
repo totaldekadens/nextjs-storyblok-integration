@@ -9,7 +9,7 @@ import {
 
 export default function Page({ story }) {
   story = useStoryblokState(story);
-  console.log(story);
+
   return (
     <div>
       <Head>
@@ -24,12 +24,14 @@ export default function Page({ story }) {
 }
 
 export async function getStaticProps({ params }) {
+  // Gets slug
   let slug = params.slug ? params.slug.join("/") : "home";
 
   let sbParams = {
     version: "draft", // or 'published'
   };
 
+  // Gets the story/content that matches the slug. e.g "/about" = You get the content from "About" in StoryBlok
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
 
