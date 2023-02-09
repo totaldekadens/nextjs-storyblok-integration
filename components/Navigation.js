@@ -1,10 +1,14 @@
 import { useState } from "react";
 import Link from "next/link";
-const Navigation = () => {
+import { useRouter } from "next/router";
+const Navigation = ({ locales, locale, defaultLocale }) => {
+  const router = useRouter();
   const [openMenu, setOpenMenu] = useState(false);
-
+  const changeLocale = (loc) => {
+    router.push(router.asPath, router.asPath, { locale: loc });
+  };
   return (
-    <div className="relative bg-white border-b-2 border-gray-100">
+    <div className="relative bg-white border-b-2 border-gray-100 z-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center  py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -52,30 +56,34 @@ const Navigation = () => {
           </div>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0 space-x-10">
             <Link href="/about">
-              <a>
-                <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                  About
-                </div>
+              <a className="text-base font-medium text-gray-500 hover:text-gray-900">
+                About
               </a>
             </Link>
             <Link href="/blog">
-              <a>
-                <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                  Blog
-                </div>
+              <a className="text-base font-medium text-gray-500 hover:text-gray-900">
+                Blog
               </a>
             </Link>
             <Link href="/services">
-              <a>
-                <div className="text-base font-medium text-gray-500 hover:text-gray-900">
-                  Services
-                </div>
+              <a className="text-base font-medium text-gray-500 hover:text-gray-900">
+                Services
               </a>
             </Link>
+            {locales.map((loc) => (
+              <span
+                key={loc}
+                onClick={() => changeLocale(loc)}
+                className={`block px-4 py-1 md:p-2 rounded-lg lg:px-4 cursor-pointer ${
+                  locale === loc ? "bg-black text-white" : ""
+                }`}
+              >
+                {loc}
+              </span>
+            ))}
           </div>
         </div>
       </div>
-
       {/* <!--
         Mobile menu, show/hide based on mobile menu state.
       --> */}
@@ -87,7 +95,7 @@ const Navigation = () => {
                 <div>
                   <img
                     className="h-8 w-auto"
-                    src="https://div.storyblok.com/f/88751/92x106/835caf912a/storyblok-logo.png"
+                    src="https://a.storyblok.com/f/88751/92x106/835caf912a/storyblok-logo.png"
                     alt="Storyblok"
                   />
                 </div>
@@ -120,34 +128,39 @@ const Navigation = () => {
               <div className="mt-6">
                 <nav className="grid gap-y-8">
                   <Link href="/about">
-                    <a>
-                      <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                        {/* <!-- Heroicon name: outline/chart-bar --> */}
-                        <span className="ml-3 text-base font-medium text-gray-900">
-                          About
-                        </span>
-                      </div>
+                    <a className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                      {/* <!-- Heroicon name: outline/chart-bar --> */}
+                      <span className="ml-3 text-base font-medium text-gray-900">
+                        About
+                      </span>
                     </a>
                   </Link>
                   <Link href="/blog">
-                    <a>
-                      <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                        {/* <!-- Heroicon name: outline/cursor-click --> */}
-                        <span className="ml-3 text-base font-medium text-gray-900">
-                          Blog
-                        </span>
-                      </div>
+                    <a className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                      {/* <!-- Heroicon name: outline/cursor-click --> */}
+                      <span className="ml-3 text-base font-medium text-gray-900">
+                        Blog
+                      </span>
                     </a>
                   </Link>
                   <Link href="/services">
-                    <a>
-                      <div className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                        <span className="ml-3 text-base font-medium text-gray-900">
-                          Services
-                        </span>
-                      </div>
+                    <a className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+                      <span className="ml-3 text-base font-medium text-gray-900">
+                        Services
+                      </span>
                     </a>
                   </Link>
+                  {locales.map((loc) => (
+                    <span
+                      key={loc}
+                      onClick={() => changeLocale(loc)}
+                      className={`block px-4 py-1 md:p-2 rounded-lg lg:px-4 cursor-pointer ${
+                        locale === loc ? "bg-black text-white" : ""
+                      }`}
+                    >
+                      {loc}
+                    </span>
+                  ))}
                 </nav>
               </div>
             </div>
@@ -157,5 +170,4 @@ const Navigation = () => {
     </div>
   );
 };
-
 export default Navigation;

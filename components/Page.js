@@ -1,11 +1,14 @@
 import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
-// Represents "Page"-block in Storyblok (Content Type Block)
-const Page = ({ blok }) => (
+const Page = ({ blok, locale }) => (
   <main className="text-center mt-4" {...storyblokEditable(blok)}>
     {blok.body.map((nestedBlok) => (
-      <StoryblokComponent blok={nestedBlok} key={nestedBlok._uid} />
+      <StoryblokComponent
+        className=""
+        blok={nestedBlok}
+        key={nestedBlok._uid}
+        locale={locale}
+      />
     ))}
   </main>
 );
-
 export default Page;
