@@ -1,32 +1,36 @@
 import ArticleTeaser from "./ArticleTeaser";
 import { getStoryblokApi, storyblokEditable } from "@storyblok/react";
-
 import { useState, useEffect } from "react";
-
-const AllArticles = ({ blok }) => {
+const AllArticles = ({ blok, locale }) => {
+  // State
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
     // Gets all articles from the "Blog"-folder in Storyblok (Nestable Block)
     const getArticles = async () => {
-      const storyblokApi = getStoryblokApi();
-      const { data } = await storyblokApi.get(`cdn/stories`, {
-        version: "draft",
+      let sbParams = {
+        version: "draft", // or 'published'
+        language: locale,
         starts_with: "blog/",
-        is_startpage: false,
-      });
+      };
+
+      const storyblokApi = getStoryblokApi();
+      const { data } = await storyblokApi.get(`cdn/stories`, sbParams);
+
+      const filteredArticles = data.stories.filter(
+        (article) => article.name != "Home"
+      );
 
       // Sets state and renders the ArticleTeaser below
       setArticles((prev) =>
-        data.stories.map((article) => {
+        filteredArticles.map((article) => {
           article.content.slug = article.slug;
           return article;
         })
       );
     };
     getArticles();
-  }, []);
-
+  }, [locale]);
   return (
     <>
       <p className="text-3xl">{blok.title}</p>
