@@ -2,12 +2,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
+
+// Todo: Fix locale
 const Navigation = ({ locales, locale, defaultLocale, blok }) => {
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState(false);
   const changeLocale = (loc) => {
     router.push(router.asPath, router.asPath, { locale: loc });
   };
+
   return (
     <div
       className="relative bg-white border-b-2 border-gray-100 z-20"
@@ -66,6 +69,7 @@ const Navigation = ({ locales, locale, defaultLocale, blok }) => {
                     className=""
                     blok={nestedBlok}
                     key={nestedBlok._uid}
+                    locale={locale}
                   />
                 ))}
             {!locales
@@ -127,40 +131,30 @@ const Navigation = ({ locales, locale, defaultLocale, blok }) => {
               </div>
               <div className="mt-6">
                 <nav className="grid gap-y-8">
-                  <Link href="/about">
-                    <a className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                      {/* <!-- Heroicon name: outline/chart-bar --> */}
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        About
-                      </span>
-                    </a>
-                  </Link>
-                  <Link href="/blog">
-                    <a className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                      {/* <!-- Heroicon name: outline/cursor-click --> */}
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        Blog
-                      </span>
-                    </a>
-                  </Link>
-                  <Link href="/services">
-                    <a className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        Services
-                      </span>
-                    </a>
-                  </Link>
-                  {locales.map((loc) => (
-                    <span
-                      key={loc}
-                      onClick={() => changeLocale(loc)}
-                      className={`block px-4 py-1 md:p-2 rounded-lg lg:px-4 cursor-pointer ${
-                        locale === loc ? "bg-black text-white" : ""
-                      }`}
-                    >
-                      {loc}
-                    </span>
-                  ))}
+                  {!blok.header_menu
+                    ? null
+                    : blok.header_menu.map((nestedBlok) => (
+                        <StoryblokComponent
+                          className=""
+                          blok={nestedBlok}
+                          key={nestedBlok._uid}
+                          locale={locale}
+                        />
+                      ))}
+
+                  {!locales
+                    ? null
+                    : locales.map((loc) => (
+                        <span
+                          key={loc}
+                          onClick={() => changeLocale(loc)}
+                          className={`block px-4 py-1 md:p-2 rounded-lg lg:px-4 cursor-pointer ${
+                            locale === loc ? "bg-black text-white" : ""
+                          }`}
+                        >
+                          {loc}
+                        </span>
+                      ))}
                 </nav>
               </div>
             </div>

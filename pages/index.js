@@ -4,7 +4,6 @@ import {
   getStoryblokApi,
   StoryblokComponent,
 } from "@storyblok/react";
-import Layout from "../components/Layout";
 
 export default function Home({
   story,
@@ -19,20 +18,18 @@ export default function Home({
     resolve_links: "url",
   });
 
+  // Doesn´t work
+  config = useStoryblokState(config, {
+    language: locale,
+  });
+
   return (
     <div>
       <Head>
         <title>Next.js - Storyblok Integration</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout
-        locales={locales}
-        locale={locale}
-        defaultLocale={defaultLocale}
-        story={config}
-      >
-        <StoryblokComponent blok={story.content} />
-      </Layout>
+      <StoryblokComponent blok={story.content} locale={locale} />
     </div>
   );
 }

@@ -2,8 +2,11 @@ import ArticleTeaser from "./ArticleTeaser";
 import { getStoryblokApi, storyblokEditable } from "@storyblok/react";
 import { useState, useEffect } from "react";
 const AllArticles = ({ blok, locale }) => {
+  // State
   const [articles, setArticles] = useState([]);
+
   useEffect(() => {
+    // Gets all articles from the "Blog"-folder in Storyblok (Nestable Block)
     const getArticles = async () => {
       let sbParams = {
         version: "draft", // or 'published'
@@ -18,6 +21,7 @@ const AllArticles = ({ blok, locale }) => {
         (article) => article.name != "Home"
       );
 
+      // Sets state and renders the ArticleTeaser below
       setArticles((prev) =>
         filteredArticles.map((article) => {
           article.content.slug = article.slug;

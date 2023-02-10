@@ -1,17 +1,10 @@
 import Head from "next/head";
-import Layout from "../components/Layout";
 import {
   useStoryblokState,
   getStoryblokApi,
   StoryblokComponent,
 } from "@storyblok/react";
-export default function Page({
-  story,
-  config,
-  locales,
-  locale,
-  defaultLocale,
-}) {
+export default function Page({ story, locale }) {
   story = useStoryblokState(story, {
     language: locale,
   });
@@ -21,14 +14,7 @@ export default function Page({
         <title>{story ? story.name : "My Site"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout
-        locales={locales}
-        locale={locale}
-        defaultLocale={defaultLocale}
-        story={config}
-      >
-        <StoryblokComponent blok={story.content} locale={locale} />
-      </Layout>
+      <StoryblokComponent blok={story.content} locale={locale} />
     </div>
   );
 }
@@ -47,6 +33,7 @@ export async function getStaticProps({
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
   let { data: config } = await storyblokApi.get("cdn/stories/config");
+
   return {
     props: {
       locales,

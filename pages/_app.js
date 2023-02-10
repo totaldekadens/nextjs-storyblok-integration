@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import { storyblokInit, apiPlugin } from "@storyblok/react";
+import { storyblokInit, apiPlugin, useStoryblokState } from "@storyblok/react";
 import Feature from "../components/Feature";
 import Grid from "../components/Grid";
 import Page from "../components/Page";
@@ -8,7 +8,6 @@ import Hero from "../components/Hero";
 import Article from "../components/Article";
 import AllArticles from "../components/AllArticles";
 import PopularArticles from "../components/PopularArticles";
-import Config from "../components/Config";
 import Layout from "../components/Layout";
 import HeaderMenu from "../components/HeaderMenu";
 import MenuLink from "../components/MenuLink";
@@ -37,8 +36,35 @@ storyblokInit({
   components,
 });
 
-function MyApp({ Component, pageProps, locale, locales, defaultLocale }) {
-  return <Component {...pageProps} />;
+function MyApp({ Component, pageProps }) {
+  // Doesn't work
+  let config = pageProps.config;
+  config = useStoryblokState(config, {
+    language: pageProps.locale,
+  });
+  console.log(config);
+
+  return (
+    <Layout
+      locales={pageProps.locales}
+      locale={pageProps.locale}
+      defaultLocale={pageProps.defaultLocale}
+      story={config}
+    >
+      <Component {...pageProps} />
+    </Layout>
+  );
+}
+
+export async function getStaticProps({ locales, defaultLocale, locale }) {
+  return {
+    props: {
+      locales,
+      locale,
+      defaultLocale,
+    },
+    revalidate: 3600,
+  };
 }
 
 export default MyApp;
