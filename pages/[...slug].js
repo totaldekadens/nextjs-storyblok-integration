@@ -45,6 +45,7 @@ export async function getStaticProps({
     revalidate: 3600,
   };
 }
+
 export async function getStaticPaths({ locales }) {
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get("cdn/links/", {

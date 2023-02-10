@@ -70,17 +70,19 @@ const Navigation = ({ locales, locale, defaultLocale }) => {
                 Services
               </a>
             </Link>
-            {locales.map((loc) => (
-              <span
-                key={loc}
-                onClick={() => changeLocale(loc)}
-                className={`block px-4 py-1 md:p-2 rounded-lg lg:px-4 cursor-pointer ${
-                  locale === loc ? "bg-black text-white" : ""
-                }`}
-              >
-                {loc}
-              </span>
-            ))}
+            {!locales
+              ? null
+              : locales.map((loc) => (
+                  <span
+                    key={loc}
+                    onClick={() => changeLocale(loc)}
+                    className={`block px-4 py-1 md:p-2 rounded-lg lg:px-4 cursor-pointer ${
+                      locale === loc ? "bg-black text-white" : ""
+                    }`}
+                  >
+                    {loc}
+                  </span>
+                ))}
           </div>
         </div>
       </div>

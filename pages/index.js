@@ -6,9 +6,12 @@ import {
 } from "@storyblok/react";
 import Layout from "../components/Layout";
 
-export default function Home({ story }) {
+export default function Home({ story, locales, locale, defaultLocale }) {
+  // console.log(locale);
+  //console.log(locales);
   story = useStoryblokState(story, {
     resolveRelations: ["popular-articles.articles"], // Populates relationships ( Without it = you only get Ids )
+    language: locale,
   });
 
   return (
@@ -17,18 +20,19 @@ export default function Home({ story }) {
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
+      <Layout locales={locales} locale={locale} defaultLocale={defaultLocale}>
         <StoryblokComponent blok={story.content} />
       </Layout>
     </div>
   );
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({ locales, defaultLocale, locale }) {
   let slug = "home";
   let sbParams = {
     version: "draft", // or 'published'
     resolve_relations: ["popular-articles.articles"], // Populates relationships ( Without it = you only get Ids )
+    language: locale,
   };
 
   // Gets the story "Home" from Storyblok
@@ -37,6 +41,9 @@ export async function getStaticProps() {
 
   return {
     props: {
+      locales,
+      locale,
+      defaultLocale,
       story: data ? data.story : false,
       key: data ? data.story.id : false,
     },
