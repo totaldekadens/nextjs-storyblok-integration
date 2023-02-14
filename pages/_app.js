@@ -19,6 +19,7 @@ import HeaderMenu from "../components/HeaderMenu";
 import MenuLink from "../components/MenuLink";
 import Navigation from "../components/Navigation";
 import { useEffect } from "react";
+import axios from "axios";
 
 // Connects a component to a blok from Storyblok
 const components = {
@@ -36,130 +37,93 @@ const components = {
   menu_link: MenuLink,
 };
 
-// Connection
+// Connection Storyblok Content API
 storyblokInit({
   accessToken: process.env.storyblokApiToken,
   use: [apiPlugin],
   components,
 });
+// Connection Storyblok Management API
+const Storyblok = new StoryblokClient({
+  oauthToken: process.env.storyblockOathToken,
+});
 
 function MyApp({ Component, pageProps }) {
-  // Doesn't work
   let config = pageProps.config;
-  config = useStoryblokState(config, {
-    language: pageProps.locale,
-  });
 
   useEffect(() => {
-    // Pushes each language to a list for comparison. List fixed, but no comaprison
-    const getAllStories = async () => {
+    const getAllStoriesAndUpdateLocales = async () => {
       const storyblokApi = getStoryblokApi();
-      const languages = pageProps.locales;
-      let list = [];
-      for (let i = 0; i < languages.length; i++) {
-        let lang = languages[i];
-        let { data } = await storyblokApi.get(`cdn/stories/`, {
-          //resolveRelations: ["popular-articles.articles"],
-          version: "draft",
-          language: lang,
-        });
+      const spaceId = "196581";
+      const defaultLang = "en"; // Default language
 
-        /*         story = useStoryblokState(story, {
-          resolveRelations: ["popular-articles.articles"], // Populates relationships ( Without it = you only get Ids )
-          resolve_links: "url",
-        }); */
+      // Removes default language from locales
+      const filteredLang = pageProps.locales.filter((l) => l !== defaultLang);
 
-        list.push(data.stories);
-      }
-      console.log(list);
-
-      list.forEach((item) => {
-        //console.log(item);
-        item.forEach((story) => {
-          if (story.content.body) {
-            story.content.body.forEach((blok) => {
-              //console.log(blok);
-              if (blok.component == "popular-articles") {
-                console.log("Behöver fixas i respektive sida istället" + blok);
-                return;
-              }
-              if (blok.timestamp) {
-                return;
-                //console.log(blok); // Set timestamp!
-              }
-              Object.entries(blok).forEach(([key, value]) => {
-                if (key.startsWith("_") || key == "component") {
-                  return;
-                }
-                if (typeof value === "string") {
-                  if (key == "timestamp" || key == "layout") {
-                    return;
-                  }
-                  console.log(value + " skall översättas");
-                  return;
-                }
-                //console.log(value);
-                if (Array.isArray(value)) {
-                  value.forEach((item) => {
-                    //console.log(item);
-                    Object.entries(item).forEach(([key, value]) => {
-                      //console.log(key);
-                      if (key.startsWith("_") || key == "component") {
-                        return;
-                      }
-                      if (typeof value === "string") {
-                        if (key == "timestamp" || key == "layout") {
-                          return;
-                        }
-                        console.log(value + " skall översättas");
-                        return;
-                      }
-                    });
-                  });
-                }
-              });
-            });
-          }
-        });
+      // Get all stories
+      let { data } = await storyblokApi.get(`cdn/stories/`, {
+        version: "draft",
+        language: defaultLang,
+        resolve_links: "url",
       });
+
+      // Gets list of all story ids
+      const storyIds = data.stories.map((story) => story.id);
+
+      /* 
+      #1 Loops through all Ids, 
+      #2 GETs all translateable objects from Storyblok, 
+      #3 POSTs object to laravel/TobbeTranslate, 
+      #4 Receives a response from Laravel (Translated object), 
+      #5 POSTs translated object to Storyblok 
+      */
+
+      // #1
+      for (let i = 0; i < storyIds.length; i++) {
+        let id = storyIds[i];
+        // #2
+        let { data } = await Storyblok.get(
+          `spaces/${spaceId}/stories/${id}/export.json?lang_code=${defaultLang}&export_lang=true`
+        );
+        // #3
+        // POST object to Tobbe translate/Laravel
+        //console.log({ data, id, spaceId, toLang: pageProps.locales });
+
+        // #4
+        // Receive Translated objects and POST to Storyblok for each country. Testing on one story.
+        //console.log({ data, id, spaceId, toLang: filteredLang });
+        if (id == 258991850) {
+          // #5
+          console.log({ data, id, spaceId, toLang: filteredLang });
+
+          // Mockup data. Represents "data" we get back from laravel
+          const json = {
+            "83266319-7946-4ecd-b2ed-a51b8c17c08b:all-articles:title":
+              "TEST fhfhbrhgbrj", // Test data
+            language: "es",
+            page: "258991850",
+            text_nodes: 0,
+            url: "blog/",
+          };
+
+          // What we need from laravel to be able to POST back translated objects to Storyblock
+          console.log({ json, id, spaceId });
+
+          // Updates story with specific language
+          axios({
+            url: `https://mapi.storyblok.com/v1/spaces/${spaceId}/stories/${id}/import.json?lang_code=${json.language}`,
+            method: "put",
+            headers: {
+              Authorization: process.env.storyblockOathToken,
+            },
+            data: { data: JSON.stringify(json) },
+          });
+        }
+      }
     };
-    const updateStoryblock = async () => {
-      //const storyblokApi = getStoryblokApi();
-
-      // Sets date and time minus 1 minute (For "schedule" with format YYYY-MM-DD HH:MM)
-      const d = new Date();
-      d.setMinutes(d.getMinutes() - 1);
-      const todayDate = d.toISOString().slice(0, 16).replace("T", " ");
-      console.log(todayDate);
-
-      // Sets date and time (For "updated_at" with format yyyy-MM-ddTHH:mm:ss.SSSZ)
-      const date = new Date(
-        new Date().toString().split("GMT")[0] + " UTC"
-      ).toISOString();
-      console.log(date);
-
-      // Fetches all stories by managementAPI
-      let { data } = await Storyblok.get(`spaces/196581/stories/`, {});
-
-      console.log(data);
-
-      // Fetches one story by id
-      /*  let { data } = await storyblokApi.get(`cdn/stories/258853578`, {
-        version: "draft",
-      }); */
-
-      // Should be able to filter on date but it's not working. Waiting for response from Storybok
-      /* let { data2 } = await storyblokApi.get(`cdn/stories/`, {
-        version: "draft",
-        filter_query: {
-          created_at: {
-            gt_date: "2023-02-02 14:16",
-          },
-        },
-      }); */
-    };
+    const updateStoryblock = async () => {};
     updateStoryblock();
-    getAllStories();
+    getAllStoriesAndUpdateLocales();
   }, [pageProps.locale]);
 
   return (
