@@ -35,7 +35,10 @@ export async function getStaticProps({ locales, defaultLocale, locale }) {
   // Gets the story "Home" from Storyblok
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
-  let { data: config } = await storyblokApi.get("cdn/stories/config", sbParams);
+  let { data: navigation } = await storyblokApi.get(
+    "cdn/stories/navigation",
+    sbParams
+  );
 
   return {
     props: {
@@ -44,7 +47,7 @@ export async function getStaticProps({ locales, defaultLocale, locale }) {
       defaultLocale,
       story: data ? data.story : false,
       key: data ? data.story.id : false,
-      config: config ? config.story : false,
+      navigation: navigation ? navigation.story : false,
     },
     revalidate: 3600,
   };

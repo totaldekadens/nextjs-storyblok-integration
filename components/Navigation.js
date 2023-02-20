@@ -10,6 +10,7 @@ const Navigation = ({ locales, locale, blok }) => {
   const changeLocale = (loc) => {
     router.push(router.asPath, router.asPath, { locale: loc });
   };
+
   return (
     <>
       {!blok ? null : (

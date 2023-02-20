@@ -24,7 +24,7 @@ const components = {
   "all-articles": AllArticles,
   article: Article,
   "popular-articles": PopularArticles,
-  config: Navigation,
+  navigation: Navigation,
   layout: Layout,
   header_menu: HeaderMenu,
   menu_link: MenuLink,
@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps }) {
       locales={pageProps.locales}
       locale={pageProps.locale}
       defaultLocale={pageProps.defaultLocale}
-      story={pageProps.config}
+      story={pageProps.navigation}
     >
       <Component {...pageProps} />
     </Layout>
