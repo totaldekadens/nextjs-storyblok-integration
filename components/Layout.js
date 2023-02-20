@@ -1,17 +1,13 @@
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import { useStoryblokState } from "@storyblok/react";
-const Layout = ({ children, locale, locales, defaultLocale, story }) => {
-  story = useStoryblokState(story, {
-    language: locale,
-  });
+
+const Layout = ({ children, locale, locales, story }) => {
   return (
     <div>
       <Navigation
-        locales={locales}
-        locale={locale}
-        defaultLocale={defaultLocale}
         blok={story ? story.content : null}
+        locale={locale}
+        locales={locales}
       />
       {children}
       {/* <Footer /> */}

@@ -4,13 +4,12 @@ import { useRouter } from "next/router";
 import { storyblokEditable, StoryblokComponent } from "@storyblok/react";
 
 // Todo: Fix locale
-const Navigation = ({ locales, locale, defaultLocale, blok }) => {
+const Navigation = ({ locales, locale, blok }) => {
   const router = useRouter();
   const [openMenu, setOpenMenu] = useState(false);
   const changeLocale = (loc) => {
     router.push(router.asPath, router.asPath, { locale: loc });
   };
-
   return (
     <>
       {!blok ? null : (
