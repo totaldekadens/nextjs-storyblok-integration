@@ -1,13 +1,7 @@
 import Head from "next/head";
-import {
-  useStoryblokState,
-  getStoryblokApi,
-  StoryblokComponent,
-} from "@storyblok/react";
+import { getStoryblokApi, StoryblokComponent } from "@storyblok/react";
+
 export default function Page({ story, locale }) {
-  story = useStoryblokState(story, {
-    language: locale,
-  });
   return (
     <div>
       <Head>
@@ -18,6 +12,7 @@ export default function Page({ story, locale }) {
     </div>
   );
 }
+
 export async function getStaticProps({
   params,
   locales,
@@ -32,7 +27,7 @@ export async function getStaticProps({
   };
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
-  let { data: config } = await storyblokApi.get("cdn/stories/config");
+  let { data: config } = await storyblokApi.get("cdn/stories/config", sbParams);
 
   return {
     props: {

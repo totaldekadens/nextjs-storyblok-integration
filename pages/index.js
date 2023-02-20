@@ -5,22 +5,11 @@ import {
   StoryblokComponent,
 } from "@storyblok/react";
 
-export default function Home({
-  story,
-  config,
-  locales,
-  locale,
-  defaultLocale,
-}) {
+export default function Home({ story, locale }) {
   story = useStoryblokState(story, {
     resolveRelations: ["popular-articles.articles"], // Populates relationships ( Without it = you only get Ids )
     language: locale,
     resolve_links: "url",
-  });
-
-  // Doesn´t work
-  config = useStoryblokState(config, {
-    language: locale,
   });
 
   return (
@@ -46,7 +35,7 @@ export async function getStaticProps({ locales, defaultLocale, locale }) {
   // Gets the story "Home" from Storyblok
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
-  let { data: config } = await storyblokApi.get("cdn/stories/config");
+  let { data: config } = await storyblokApi.get("cdn/stories/config", sbParams);
 
   return {
     props: {

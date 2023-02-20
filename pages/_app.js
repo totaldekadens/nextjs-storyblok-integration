@@ -42,14 +42,12 @@ const Storyblok = new StoryblokClient({
 });
 
 function MyApp({ Component, pageProps }) {
-  let config = pageProps.config;
-
   return (
     <Layout
       locales={pageProps.locales}
       locale={pageProps.locale}
       defaultLocale={pageProps.defaultLocale}
-      story={config}
+      story={pageProps.config}
     >
       <Component {...pageProps} />
     </Layout>
